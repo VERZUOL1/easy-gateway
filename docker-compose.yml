@@ -1,0 +1,48 @@
+version: '3'
+services:
+  service-one:
+    build:
+      context: ./service-one
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./service-one:/app
+    ports:
+      - '3001:3001'
+    restart: on-failure
+    container_name: service-one
+    networks:
+      - app
+    expose:
+      - '3001'
+  service-two:
+    build:
+      context: ./service-two
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./service-two:/app
+    ports:
+      - '3002:3002'
+    restart: on-failure
+    container_name: service-two
+    networks:
+      - app
+    expose:
+      - '3002'
+  gateway:
+    build:
+      context: ./easy-gateway
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./gateway:/app
+    ports:
+      - '3000:3000'
+    restart: on-failure
+    container_name: gateway
+    networks:
+      - app
+networks:
+  app:
+    driver: bridge

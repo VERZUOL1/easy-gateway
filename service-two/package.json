@@ -1,0 +1,15 @@
+{
+  "name": "service-two",
+  "version": "1.0.0",
+  "description": "Service two",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon -L server.js"
+  },
+  "author": "Oleg Verzunov",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}

@@ -1,0 +1,83 @@
+http:
+  port: 3000
+admin:
+  port: 9876
+  host: localhost
+apiEndpoints:
+  auth:
+    path: '/auth*'
+    methods: ['POST']
+  service-one:
+    path: '/service-one'
+  service-two:
+    path: '/service-two'
+  example:
+    path: '/example'
+serviceEndpoints:
+  auth:
+    url: 'http://auth:3003'
+  service-one:
+    url: 'http://service-one:3001'
+  service-two:
+    url: 'http://service-two:3002'
+policies:
+  - log
+  - proxy
+  - jwt
+  - request-transformer
+  - rate-limit
+pipelines:
+  auth:
+    apiEndpoints:
+      - auth
+    policies:
+      - log:
+          action:
+            message: 'auth ${req.method}'
+      - proxy:
+          action:
+            serviceEndpoint: auth
+  service-one:
+    apiEndpoints:
+      - service-one
+    policies:
+      - log:
+          action:
+            message: 'service-one ${req.method}'
+      - jwt:
+          action:
+            secretOrPublicKey: '5EmklxeKKijqO1qUOt0jRI'
+            checkCredentialExistence: false
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - proxy:
+          action:
+            serviceEndpoint: service-one
+            ignorePath: false
+            prependPath: true
+            stripPath: true
+  service-two:
+    apiEndpoints:
+      - service-two
+    policies:
+      - log:
+          action:
+            message: 'service-two ${req.method}'
+      - jwt:
+          action:
+            secretOrPublicKey: '5EmklxeKKijqO1qUOt0jRI'
+            checkCredentialExistence: false
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - proxy:
+          action:
+            serviceEndpoint: service-two
+            ignorePath: false
+            prependPath: true
+            stripPath: true

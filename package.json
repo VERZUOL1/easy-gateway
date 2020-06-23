@@ -1,0 +1,13 @@
+{
+  "name": "api-gw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "docker-compose up -d",
+    "build": "docker-compose build",
+    "stop": "docker-compose stop"
+  },
+  "author": "Oleg Verzunov",
+  "license": "ISC"
+}
